@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>استمارة التسجيل الإلكتروني | أكاديميتك الخاصة</title>
+  <link href="https://googleapis.com" rel="stylesheet">
+  <link rel="stylesheet" href="https://cloudflare.com">
+  <style>
+    :root {
+      --bg-dark: #1e2538;
+      --card-bg: #262f45;
+      --accent: #e94560;
+      --text-white: #ffffff;
+      --text-muted: #8b9bb4;
+      --border-color: #384563;
+      --gold: #f0a500;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+    
+    body { 
+      background-color: var(--bg-dark); 
+      /* خلفية شبكية مطابقة تماماً لنظام cps.awam.pro */
+      background-image: linear-gradient(rgba(56, 69, 99, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(56, 69, 99, 0.15) 1px, transparent 1px);
+      background-size: 20px 20px;
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      min-height: 100vh; 
+      padding: 20px; 
+    }
+    
+    .form-container { 
+      background: var(--card-bg); 
+      width: 100%; 
+      max-width: 550px; 
+      padding: 40px 30px; 
+      border-radius: 16px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+      border: 1px solid var(--border-color);
+    }
+    
+    .form-header { text-align: center; margin-bottom: 30px; }
+    .form-header .badge { background: rgba(240, 165, 0, 0.15); color: var(--gold); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-block; margin-bottom: 12px; }
+    .form-header h1 { color: var(--text-white); font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .form-header p { color: var(--text-muted); font-size: 14px; }
+    
+    .input-group { text-align: right; margin-bottom: 20px; }
+    .input-group label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 700; color: var(--text-white); }
+    .input-group label span { color: var(--accent); }
+    
+    .input-wrapper { position: relative; display: flex; align-items: center; }
+    .input-wrapper i { position: absolute; right: 16px; color: var(--text-muted); font-size: 16px; }
+    
+    .input-group input, .input-group select { 
+      width: 100%; 
+      padding: 14px 44px 14px 16px; 
+      border: 1px solid var(--border-color); 
+      border-radius: 10px; 
+      background: #1d2436; 
+      color: var(--text-white);
+      font-size: 14px; 
+      transition: all 0.3s; 
+      outline: none; 
+    }
+    
+    .input-group input:focus, .input-group select:focus { border-color: var(--accent); background: #222a3f; box-shadow: 0 0 8px rgba(233,69,96,0.2); }
+    .input-group select { appearance: none; cursor: pointer; }
+    .input-wrapper::after { content: '\f078'; font-family: 'Font Awesome 5 Free'; font-weight: 900; position: absolute; left: 16px; color: var(--text-muted); pointer-events: none; }
+    .input-group .no-arrow::after { display: none; }
+    
+    ::placeholder { color: #53647e; }
+    
+    .btn-submit { 
+      width: 100%; 
+      padding: 16px; 
+      background: linear-gradient(135deg, #e94560 0%, #c62a47 100%); 
+      color: #fff; 
+      border: none; 
+      border-radius: 10px; 
+      font-size: 16px; 
+      font-weight: 700; 
+      cursor: pointer; 
+      transition: all 0.3s; 
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 14px rgba(233,69,96,0.3);
+      margin-top: 15px;
+    }
+    
+    .btn-submit:hover { transform: translateY(-1px); opacity: 0.95; box-shadow: 0 6px 20px rgba(233,69,96,0.4); }
+    
+    .success-alert { display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #10b981; padding: 15px; border-radius: 10px; text-align: center; font-weight: 700; font-size: 14px; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <div class="form-header">
+      <span class="badge"><i class="fa-solid fa-bolt"></i> التسجيل متاح الآن</span>
+      <h1>استمارة الانضمام للدورات التدريبية</h1>
+      <p>يرجى ملء البيانات التالية بدقة لتأكيد حجز مقعدك</p>
+    </div>
+    
+    <div id="successBox" class="success-alert">
+      <i class="fa-solid fa-circle-check"></i> تم إرسال معلوماتك بنجاح! سنتواصل معك قريباً.
+    </div>
+    
+    <form id="landingForm">
+      <div class="input-group">
+        <label>الاسم الكامل <span>*</span></label>
+        <div class="input-wrapper no-arrow">
+          <i class="fa-solid fa-user"></i>
+          <input type="text" id="studentName" placeholder="أدخل اسمك الثلاثي" required>
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <label>رقم الهاتف (واتساب) <span>*</span></label>
+        <div class="input-wrapper no-arrow">
+          <i class="fa-solid fa-phone"></i>
+          <input type="tel" id="studentPhone" placeholder="07xxxxxxxx" required>
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <label>اختر الدورة التدريبية <span>*</span></label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <select id="courseSelect" required>
+            <option value="" disabled selected>اضغط للاختيار من القائمة</option>
+            <option value="هندسة الوعي الذاتي">دورة هندسة الوعي الذاتي</option>
+            <option value="التخطيط الشخصي">كورس التخطيط الشخصي الاستراتيجي</option>
+            <option value="الذكاء العاطفي">ورشة الذكاء العاطفي والتواصل</option>
+          </select>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn-submit">
+        <i class="fa-solid fa-paper-plane"></i> إرسال وتأكيد التسجيل
+      </button>
+    </form>
+  </div>
+
+  <!-- ربط قاعدة البيانات السحابية الحقيقية (Firestore) -->
+  <script type="module">
+    import { initializeApp } from "https://gstatic.com";
+    import { getFirestore, collection, addDoc } from "https://gstatic.com";
+
+    // مفاتيح الربط الكاملة والخاصة بمشروعك
+    const firebaseConfig = {
+      apiKey: "AIzaSyBcDDH3eK31d_YRcw9T7EKvQsVu1AxVQ4U",
+      authDomain: "://firebaseapp.com",
+      projectId: "my-academy-deb07",
+      storageBucket: "my-academy-deb07.firebasestorage.app",
+      messagingSenderId: "353925836983",
+      appId: "1:353925836983:web:48e4b2ad4544a76e065d32",
+      measurementId: "G-DCGMMNBK0G"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    document.getElementById('landingForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('studentName').value;
+      const phone = document.getElementById('studentPhone').value;
+      const course = document.getElementById('courseSelect').value;
+      const successBox = document.getElementById('successBox');
+
+      try {
+        // حفظ بيانات الطالب حقيقياً داخل قاعدة بيانات الفايربيس السحابية
+        await addDoc(collection(db, "registrations"), {
+          studentName: name,
+          studentPhone: phone,
+          selectedCourse: course,
+          timestamp: new Date()
+        });
+
+        successBox.style.display = "block";
+        document.getElementById('landingForm').reset();
+      } catch (error) {
+        alert("حدث خطأ أثناء الإرسال، يرجى المحاولة مرة أخرى.");
+      }
+    });
+  </script>
+</body>
+</html>
